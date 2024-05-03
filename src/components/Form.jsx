@@ -31,8 +31,13 @@ function Copyright(props) {
 
 export default function Form() {
   const [data, setData] = useState(null);
-  const [prompt, setPrompt] = useState("");
-  const [learningStyle, setLearningStyle] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [format, setFormat] = useState([]);
+  const [learningStyle, setLearningStyle] = useState([]);
+  const [topic, setTopic] = useState("");
+  const [level, setLevel] = useState("");
+  const [availability, setAvailability] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -66,26 +71,98 @@ export default function Form() {
           Resource Request Engine
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {/* Name */}
           <TextField
             margin="normal"
             required
             fullWidth
-            id="prompt"
-            label="Prompt"
-            name="prompt"
+            id="name"
+            label="Name"
+            name="name"
             autoFocus
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
+
+          {/* Email */}
           <TextField
             margin="normal"
             required
             fullWidth
-            name="learning-style"
-            label="Learning Style"
-            id="learning-style"
-            value={learningStyle}
-            onChange={(e) => setLearningStyle(e.target.value)}
+            id="email"
+            label="Email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          {/* Preferred Format */}
+          <FormControl fullWidth>
+            <InputLabel id="format-label">Preferred Format</InputLabel>
+            <Select
+              labelId="format-label"
+              id="format"
+              multiple
+              value={format}
+              onChange={(e) => setFormat(e.target.value)}
+            >
+              <MenuItem value="text">Text</MenuItem>
+              <MenuItem value="audio">Audio</MenuItem>
+              <MenuItem value="video">Video</MenuItem>
+              <MenuItem value="images">Images</MenuItem>
+            </Select>
+          </FormControl>
+
+          {/* Preferred Learning Style */}
+          <FormControl fullWidth>
+            <InputLabel id="learning-style-label">
+              Preferred Learning Style
+            </InputLabel>
+            <Select
+              labelId="learning-style-label"
+              id="learning-style"
+              multiple
+              value={learningStyle}
+              onChange={(e) => setLearningStyle(e.target.value)}
+            >
+              <MenuItem value="visual">Visual</MenuItem>
+              <MenuItem value="kinesthetic">Kinesthetic</MenuItem>
+              <MenuItem value="auditory">Auditory</MenuItem>
+              <MenuItem value="reading-writing">Reading/Writing</MenuItem>
+            </Select>
+          </FormControl>
+
+          {/* Topic of Interest */}
+          <TextField
+            margin="normal"
+            fullWidth
+            id="topic"
+            label="Topic of Interest"
+            name="topic"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+          />
+
+          {/* Current Level in Topic */}
+          <TextField
+            margin="normal"
+            fullWidth
+            id="level"
+            label="Current Level in Topic"
+            name="level"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+          />
+
+          {/* Time/Availability */}
+          <TextField
+            margin="normal"
+            fullWidth
+            id="availability"
+            label="Time/Availability"
+            name="availability"
+            value={availability}
+            onChange={(e) => setAvailability(e.target.value)}
           />
           <Button
             type="submit"
