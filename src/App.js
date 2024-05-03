@@ -1,10 +1,10 @@
 import "./App.css";
-import SignIn from "./components/Form.jsx";
+import Form from "./components/Form.jsx";
 
 function App() {
   return (
     <div className="App">
-      <SignIn />
+      <Form />
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,6 +9,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { responsiveFontSizes } from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -28,8 +30,22 @@ function Copyright(props) {
 }
 
 export default function Form() {
-  const handleSubmit = (event) => {
+  const [data, setData] = useState(null);
+  const [prompt, setPrompt] = useState("");
+  const [learningStyle, setLearningStyle] = useState("");
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const response = await axios.get("http://localhost:3001/api", {
+        params: { prompt, learningStyle },
+      });
+      console.log("RES", response);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setData({ message: "Error fetching data. Please try again later." });
+    }
   };
 
   return (
@@ -54,10 +70,12 @@ export default function Form() {
             margin="normal"
             required
             fullWidth
-            id=""
+            id="prompt"
             label="Prompt"
             name="prompt"
             autoFocus
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
           />
           <TextField
             margin="normal"
@@ -66,6 +84,8 @@ export default function Form() {
             name="learning-style"
             label="Learning Style"
             id="learning-style"
+            value={learningStyle}
+            onChange={(e) => setLearningStyle(e.target.value)}
           />
           <Button
             type="submit"
@@ -77,6 +97,14 @@ export default function Form() {
           </Button>
         </Box>
       </Box>
+
+      <div>
+        {data ? (
+          <p>{data.message}</p>
+        ) : (
+          <p>Enter prompt and learning style to request.</p>
+        )}
+      </div>
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
