@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Link from "@mui/material/Link";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
 import { responsiveFontSizes } from "@mui/material";
 
 function Copyright(props) {
@@ -21,7 +26,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Team 18
+        Team 14
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -31,11 +36,59 @@ function Copyright(props) {
 
 export default function Form() {
   const [data, setData] = useState(null);
-  const [prompt, setPrompt] = useState("");
-  const [learningStyle, setLearningStyle] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [format, setFormat] = useState([]);
+  const [learningStyle, setLearningStyle] = useState([]);
+  const [topic, setTopic] = useState("");
+  const [level, setLevel] = useState("");
+  const [availability, setAvailability] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const prompt = `
+We have the following resources for coding:
+- freeCodeCamp
+- Codecademy
+- Coursera
+- Udemy
+- Khan Academy
+- edX
+- Pluralsight
+- Code.org
+- Code School
+- Code Avengers
+- Treehouse
+- CodeHS
+- W3Schools
+- Mozilla Developer Network
+- The Odin Project
+- HackerRank
+- LeetCode
+- GeeksforGeeks
+- HackerEarth
+- Codewars
+- Exercism
+- CodeSignal
+- TopCoder
+- CodeChef
+- AtCoder
+- SPOJ
+- Project Euler
+- Advent of Code
+- CodinGame
+- Codeforces
+- CodeAbbey
+- URI Online Judge
+
+    Given a learning style of ${learningStyle.join(
+      ", "
+    )}, I am interested in learning about ${topic} at a level of ${level}. I am available ${availability}. Please provide resources in the format of ${format.join(
+      ", "
+    )}.
+    `;
+
     try {
       const response = await axios.get("http://localhost:3001/api", {
         params: { prompt, learningStyle },
@@ -66,26 +119,98 @@ export default function Form() {
           Resource Request Engine
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {/* Name */}
           <TextField
             margin="normal"
             required
             fullWidth
-            id="prompt"
-            label="Prompt"
-            name="prompt"
+            id="name"
+            label="Name"
+            name="name"
             autoFocus
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
+
+          {/* Email */}
           <TextField
             margin="normal"
             required
             fullWidth
-            name="learning-style"
-            label="Learning Style"
-            id="learning-style"
-            value={learningStyle}
-            onChange={(e) => setLearningStyle(e.target.value)}
+            id="email"
+            label="Email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          {/* Preferred Format */}
+          <FormControl fullWidth>
+            <InputLabel id="format-label">Preferred Format</InputLabel>
+            <Select
+              labelId="format-label"
+              id="format"
+              multiple
+              value={format}
+              onChange={(e) => setFormat(e.target.value)}
+            >
+              <MenuItem value="text">Text</MenuItem>
+              <MenuItem value="audio">Audio</MenuItem>
+              <MenuItem value="video">Video</MenuItem>
+              <MenuItem value="images">Images</MenuItem>
+            </Select>
+          </FormControl>
+
+          {/* Preferred Learning Style */}
+          <FormControl fullWidth>
+            <InputLabel id="learning-style-label">
+              Preferred Learning Style
+            </InputLabel>
+            <Select
+              labelId="learning-style-label"
+              id="learning-style"
+              multiple
+              value={learningStyle}
+              onChange={(e) => setLearningStyle(e.target.value)}
+            >
+              <MenuItem value="visual">Visual</MenuItem>
+              <MenuItem value="kinesthetic">Kinesthetic</MenuItem>
+              <MenuItem value="auditory">Auditory</MenuItem>
+              <MenuItem value="reading-writing">Reading/Writing</MenuItem>
+            </Select>
+          </FormControl>
+
+          {/* Topic of Interest */}
+          <TextField
+            margin="normal"
+            fullWidth
+            id="topic"
+            label="Topic of Interest"
+            name="topic"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+          />
+
+          {/* Current Level in Topic */}
+          <TextField
+            margin="normal"
+            fullWidth
+            id="level"
+            label="Current Level in Topic"
+            name="level"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+          />
+
+          {/* Time/Availability */}
+          <TextField
+            margin="normal"
+            fullWidth
+            id="availability"
+            label="Time/Availability"
+            name="availability"
+            value={availability}
+            onChange={(e) => setAvailability(e.target.value)}
           />
           <Button
             type="submit"
@@ -100,9 +225,13 @@ export default function Form() {
 
       <div>
         {data ? (
-          <p>{data.message}</p>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: window?.marked.parse(data.message),
+            }}
+          />
         ) : (
-          <p>Enter prompt and learning style to request.</p>
+          <p>Enter inputs and learning style to request.</p>
         )}
       </div>
       <Copyright sx={{ mt: 8, mb: 4 }} />
