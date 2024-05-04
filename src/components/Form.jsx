@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Link from "@mui/material/Link";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
 import { responsiveFontSizes } from "@mui/material";
 
 function Copyright(props) {
@@ -21,7 +26,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Team 18
+        Team 14
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -41,6 +46,49 @@ export default function Form() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const prompt = `
+We have the following resources for coding:
+- freeCodeCamp
+- Codecademy
+- Coursera
+- Udemy
+- Khan Academy
+- edX
+- Pluralsight
+- Code.org
+- Code School
+- Code Avengers
+- Treehouse
+- CodeHS
+- W3Schools
+- Mozilla Developer Network
+- The Odin Project
+- HackerRank
+- LeetCode
+- GeeksforGeeks
+- HackerEarth
+- Codewars
+- Exercism
+- CodeSignal
+- TopCoder
+- CodeChef
+- AtCoder
+- SPOJ
+- Project Euler
+- Advent of Code
+- CodinGame
+- Codeforces
+- CodeAbbey
+- URI Online Judge
+
+    Given a learning style of ${learningStyle.join(
+      ", "
+    )}, I am interested in learning about ${topic} at a level of ${level}. I am available ${availability}. Please provide resources in the format of ${format.join(
+      ", "
+    )}.
+    `;
+
     try {
       const response = await axios.get("http://localhost:3001/api", {
         params: { prompt, learningStyle },
@@ -177,9 +225,13 @@ export default function Form() {
 
       <div>
         {data ? (
-          <p>{data.message}</p>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: window?.marked.parse(data.message),
+            }}
+          />
         ) : (
-          <p>Enter prompt and learning style to request.</p>
+          <p>Enter inputs and learning style to request.</p>
         )}
       </div>
       <Copyright sx={{ mt: 8, mb: 4 }} />

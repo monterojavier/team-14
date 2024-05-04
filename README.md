@@ -1,4 +1,4 @@
-# Team 18 - Bloomberg x The Knowledge House Hackathon
+# Team 14 - Bloomberg x The Knowledge House Hackathon
 
 ## Problem Statement:
 
